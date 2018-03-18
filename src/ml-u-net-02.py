@@ -20,17 +20,25 @@ from skimage.morphology import label
 from skimage.transform import resize
 from tqdm import tqdm
 
-# Set some parameters
+# Image dimensions (resize)
 IMG_WIDTH = 256
 IMG_HEIGHT = 256
 IMG_CHANNELS = 3
-BATCH_SIZE = 16  # the higher the better
-ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..')) + '\\'
+
+# Batch size for weight calculation
+BATCH_SIZE = 16
+
+# Filename setup
+ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\'
 TRAIN_PATH = ROOT_PATH + 'input\\stage1_train_aug_02\\'
 TEST_PATH = ROOT_PATH + 'input\\stage1_test\\'
+MODEL_FILE_PATH = ROOT_PATH + 'output\\model-dsbowl2018-4.h5'
 
+# Skimage warnings
 warnings.filterwarnings('ignore', category=UserWarning, module='skimage')
-input_seed = 42
+
+# For experiment replication
+input_seed = 42  # the universe responsa
 random.seed = input_seed
 np.random.seed(input_seed)
 
@@ -38,6 +46,7 @@ np.random.seed(input_seed)
 train_ids = next(os.walk(TRAIN_PATH))[1]
 test_ids = next(os.walk(TEST_PATH))[1]
 
+# Load input data
 # Get and resize train images and masks
 X_train = np.zeros((len(train_ids), IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS), dtype=np.uint8)
 Y_train = np.zeros((len(train_ids), IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
@@ -117,7 +126,7 @@ train_generator = zip(x, y)
 val_generator = zip(x_val, y_val)
 
 
-# Define IoU metric
+# Define IoU metric: IoU = (A Intersection B)/(A union B)
 def mean_iou(y_true, y_pred):
     prec = []
     for t in np.arange(0.5, 1.0, 0.05):
@@ -128,6 +137,7 @@ def mean_iou(y_true, y_pred):
             score = tf.identity(score)
         prec.append(score)
     return K.mean(K.stack(prec), axis=0)
+
 
 print('Build network ...')
 
