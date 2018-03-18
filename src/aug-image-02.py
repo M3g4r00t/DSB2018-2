@@ -4,6 +4,7 @@ import sys
 import warnings
 
 import numpy as np
+from PIL import Image
 from imgaug import augmenters as iaa, misc
 from skimage.io import imread
 from tqdm import tqdm
@@ -23,6 +24,7 @@ TEST_PATH = ROOT_PATH + 'input\\stage1_test\\'
 TRAIN_PATH_PP = ROOT_PATH + 'input\\stage1_train_pp_02\\'
 TEST_PATH_PP = ROOT_PATH + 'input\\stage1_test_pp_02\\'
 TRAIN_PATH_AUG = ROOT_PATH + 'input\\stage1_train_aug_02\\'
+NOISE_PATH = ROOT_PATH + 'input\\'
 
 # Skimage warnings
 warnings.filterwarnings('ignore', category=UserWarning, module='skimage')
@@ -202,4 +204,349 @@ for n, id_ in tqdm(enumerate(train_ids), total=len(train_ids)):
         mask_ = imread(path + '/masks/' + id_ + '.png')
         mask = np.maximum(mask, mask_)
         mask_aug = seq_mask.augment_image(mask)
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #8
+
+    id_aug = id_ + '-8'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-01.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #9
+
+    id_aug = id_ + '-9'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-01.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(90)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #10
+
+    id_aug = id_ + '-10'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-01.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(180)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #11
+
+    id_aug = id_ + '-11'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-01.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(270)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #12
+
+    id_aug = id_ + '-12'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-02.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #13
+
+    id_aug = id_ + '-13'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-02.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(90)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #14
+
+    id_aug = id_ + '-14'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-02.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(180)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #15
+
+    id_aug = id_ + '-15'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-02.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(270)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #16
+
+    id_aug = id_ + '-16'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-03.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #16
+
+    id_aug = id_ + '-16'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-03.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(90)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #17
+
+    id_aug = id_ + '-17'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-03.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(180)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
+        misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
+
+    # Transform #18
+
+    id_aug = id_ + '-18'
+
+    if not os.path.exists(TRAIN_PATH_AUG + id_aug):
+        os.mkdir(TRAIN_PATH_AUG + id_aug)
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/images/')
+        os.mkdir(TRAIN_PATH_AUG + id_aug + '/masks/')
+
+        background = Image.open(file)
+        foreground = Image.open(NOISE_PATH + "noise-03.png")
+
+        background = background.convert('RGBA')
+        foreground = foreground.convert('RGBA')
+        foreground = foreground.rotate(270)
+
+        img_aug = Image.new("RGBA", background.size)
+        img_aug = Image.alpha_composite(img_aug, background)
+        img_aug = Image.alpha_composite(img_aug, foreground)
+
+        img_aug = img_aug.convert("RGB")
+        img_aug.save(TRAIN_PATH_AUG + id_aug + '/images/' + id_aug + '.png')
+
+        mask = np.zeros((IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+        mask_ = imread(path + '/masks/' + id_ + '.png')
+        mask = np.maximum(mask, mask_)
+        mask_aug = mask
         misc.imsave(TRAIN_PATH_AUG + id_aug + '/masks/' + id_aug + '.png', mask_aug)
