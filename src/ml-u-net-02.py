@@ -16,7 +16,7 @@ from keras.layers.merge import concatenate
 from keras.layers.pooling import MaxPooling2D
 from keras.models import Model, load_model
 from keras.preprocessing import image
-from skimage.io import imread, imshow
+from skimage.io import imread, imshow, imsave
 from skimage.morphology import label
 from skimage.transform import resize
 from sklearn import model_selection
@@ -34,8 +34,10 @@ BATCH_SIZE = 16
 ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..')) + '\\'
 TRAIN_PATH = ROOT_PATH + 'input\\stage1_train_aug_02\\'
 TEST_PATH = ROOT_PATH + 'input\\stage1_test\\'
-MODEL_FILE_PATH = ROOT_PATH + 'output\\model-dsbowl2018-4.h5'
-IS_SERVER = False
+MODEL_FILE_NAME = 'model-dsbowl2018-4.h5'
+MODEL_FILE_PATH = ROOT_PATH + 'output\\' + MODEL_FILE_NAME
+VIEW_IMAGE_FLAG = True
+SAVE_IMAGE_RESULTS = True
 
 # Skimage warnings
 warnings.filterwarnings('ignore', category=UserWarning, module='skimage')
@@ -53,6 +55,11 @@ test_ids = next(os.walk(TEST_PATH))[1]
 # Get and resize train images and masks
 X_train = np.zeros((len(train_ids), IMG_HEIGHT, IMG_WIDTH, IMG_CHANNELS), dtype=np.uint8)
 Y_train = np.zeros((len(train_ids), IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
+''' Begin: Erase in production '''
+X_train = X_train[:32 * 4]
+Y_train = Y_train[:32 * 4]
+train_ids = train_ids[:32 * 4]
+''' End: Erase in production '''
 print('Getting train images and masks ... ')
 sys.stdout.flush()
 for n, id_ in tqdm(enumerate(train_ids), total=len(train_ids)):
@@ -74,10 +81,10 @@ for n, id_ in tqdm(enumerate(test_ids), total=len(test_ids)):
     img = resize(img, (IMG_HEIGHT, IMG_WIDTH), mode='constant', preserve_range=True)
     X_test[n] = img
 
-X_train, X_val, Y_train, Y_val = model_selection.train_test_split(X_train[:32 * 4], Y_train[:32 * 4], test_size=0.25,
+X_train, X_val, Y_train, Y_val = model_selection.train_test_split(X_train, Y_train, test_size=0.25,
                                                                   random_state=input_seed)
 
-if not IS_SERVER:
+if VIEW_IMAGE_FLAG:
     try:
         # Check if training data looks all right
         ix = random.randint(0, len(X_train))
@@ -136,7 +143,7 @@ if not os.path.exists(MODEL_FILE_PATH):
     x_val = image_datagen_val.flow(X_val, batch_size=BATCH_SIZE, shuffle=True, seed=input_seed)
     y_val = mask_datagen_val.flow(Y_val, batch_size=BATCH_SIZE, shuffle=True, seed=input_seed)
 
-    if not IS_SERVER:
+    if VIEW_IMAGE_FLAG:
         try:
             # Checking if the images fit
             imshow(x.next()[0].astype(np.uint8))
@@ -243,7 +250,7 @@ for i in range(len(preds_test)):
                                        (sizes_test[i][0], sizes_test[i][1]),
                                        mode='constant', preserve_range=True))
 
-if not IS_SERVER:
+if VIEW_IMAGE_FLAG:
     try:
         # Perform a sanity check on some random training samples
         ix = random.randint(0, len(preds_train_t))
@@ -306,6 +313,11 @@ print('Create submission DataFrame ...')
 sub = pd.DataFrame()
 sub['ImageId'] = new_test_ids
 sub['EncodedPixels'] = pd.Series(rles).apply(lambda x: ' '.join(str(y) for y in x))
-sub.to_csv(ROOT_PATH + 'output\\sub-dsbowl2018-aug-u-net-02-wo-norm-20180318.csv', index=False)
+sub.to_csv(ROOT_PATH + 'output\\sub-dsbowl2018-' + MODEL_FILE_NAME + '-20180319.csv', index=False)
 
-plt.show()
+if SAVE_IMAGE_RESULTS:
+    for n, id_ in enumerate(test_ids):
+        path = TEST_PATH + id_
+        imsave(path + '/images/' + MODEL_FILE_NAME + '.png', resize(np.squeeze(preds_test_t[n]),
+                                                                    (sizes_test[n][0], sizes_test[n][1]),
+                                                                    mode='constant', preserve_range=True))
